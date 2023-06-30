@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>FAQ</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+  <script src="script.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1>FAQ</h1>
+    <input type="text" id="searchInput" placeholder="Search...">
+  </header>
+
+  <main>
+    <ul id="faqList">
+      <!-- FAQ列表将在JavaScript中动态生成 -->
+    </ul>
+  </main>
+
+  <script>
+    // 假设您有一个包含FAQ数据的数组
+    const faqs = [
+      { question: "Question 1", answer: "Answer 1" },
+      { question: "Question 2", answer: "Answer 2" },
+      { question: "Question 3", answer: "Answer 3" },
+      // 添加更多FAQ项...
+    ];
+
+    // 生成FAQ列表
+    function generateFAQList(faqs) {
+      const faqList = document.getElementById('faqList');
+      faqList.innerHTML = '';
+
+      for (const faq of faqs) {
+        const listItem = document.createElement('li');
+        listItem.innerHTML = `
+          <div class="faq-item">
+            <div class="question">
+              <h3>${faq.question}</h3>
+              <button class="collapse-button">-</button>
+            </div>
+            <div class="answer">${faq.answer}</div>
+          </div>
+        `;
+        faqList.appendChild(listItem);
+      }
+
+      // 监听问题的点击事件，实现折叠和展开功能
+      const questions = document.getElementsByClassName('question');
+      for (const question of questions) {
+        const button = question.querySelector('.collapse-button');
+        const answer = question.nextElementSibling;
+
+        button.addEventListener('click', () => {
+          if (answer.style.display === 'none') {
+            answer.style.display = 'block';
+            button.innerHTML = '-';
+          } else {
+            answer.style.display = 'none';
+            button.innerHTML = '+';
+          }
+        });
+      }
+    }
+
+    // 获取搜索输入框和FAQ列表元素
+    const searchInput = document.getElementById('searchInput');
+
+    // 监听搜索输入框的变化
+    searchInput.addEventListener('input', handleSearch);
+
+    // 初始化FAQ列表
+    generateFAQList(faqs);
+
+    // 处理搜索功能
+    function handleSearch() {
+      const searchTerm = searchInput.value.toLowerCase();
+      const filteredFAQs = faqs.filter(faq =>
+        faq.question.toLowerCase().includes(searchTerm) ||
+        faq.answer.toLowerCase().includes(searchTerm)
+      );
+
+      generateFAQList(filteredFAQs);
+    }
+  </script>
+</body>
+
+</html>
